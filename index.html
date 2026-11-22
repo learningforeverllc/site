@@ -4,48 +4,183 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Learning Forever LLC</title>
-<meta name="description" content="Learning Forever LLC is a small California company that makes apps and practical guides.">
+<link rel="icon" href="assets/favicon.png">
+<meta property="og:title" content="Learning Forever LLC">
+<meta property="og:description" content="Consumer apps and practical software education.">
+<meta name="description" content="Learning Forever LLC builds consumer apps and practical software education.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root { --bg: #f6f7f4; --card: #ffffff; --fg: #1d2420; --muted: #5b665f; --line: #dfe5df; --accent: #2f8f5b; }
-  @media (prefers-color-scheme: dark) { :root { --bg: #121614; --card: #1a201d; --fg: #e6ece7; --muted: #9aa69e; --line: #2a332e; --accent: #5cc27d; } }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; }
-  main { max-width: 680px; margin: 0 auto; padding: 64px 20px 48px; }
-  h1 { font-size: 34px; line-height: 1.15; margin: 0 0 12px; letter-spacing: -0.02em; }
-  .lede { color: var(--muted); font-size: 19px; margin: 0 0 40px; }
-  h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 12px; }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; margin-bottom: 14px; }
-  .card h3 { margin: 0 0 4px; font-size: 19px; }
-  .card p { margin: 0; color: var(--muted); }
-  .tag { display: inline-block; font-size: 12px; font-weight: 600; color: var(--accent); border: 1px solid currentColor; border-radius: 999px; padding: 1px 8px; margin-left: 6px; vertical-align: 2px; }
-  section { margin-bottom: 36px; }
-  a { color: var(--accent); }
-  footer { color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); padding-top: 18px; }
+  :root { --bg:#060b16; --panel:rgba(255,255,255,.035); --line:rgba(160,190,255,.12); --fg:#eef3ff; --muted:#8e9bb8; --lime:#b6ff5c; --cyan:#5ce1ff; }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--bg); color:var(--fg); font:16px/1.6 "Space Grotesk",system-ui,sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+  a { color:inherit; text-decoration:none; }
+  .wrap { max-width:1180px; margin:0 auto; padding:0 24px; }
+  .mono { font:500 12px/1 "IBM Plex Mono",monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--lime); }
+
+  nav { position:fixed; top:16px; left:50%; transform:translateX(-50%); z-index:10; width:min(1132px,calc(100% - 32px)); display:flex; align-items:center; justify-content:space-between; padding:10px 10px 10px 20px; border:1px solid var(--line); border-radius:16px; background:rgba(6,11,22,.55); backdrop-filter:blur(18px); }
+  .logo { display:flex; align-items:center; gap:10px; font-weight:600; }
+  .px { display:grid; grid-template-columns:repeat(3,6px); gap:2px; }
+  .px i { width:6px; height:6px; background:var(--lime); border-radius:1px; }
+  .px i:nth-child(2n) { background:var(--cyan); } .px i:nth-child(5) { background:transparent; }
+  nav ul { display:flex; gap:28px; list-style:none; padding:0; font-size:14px; color:var(--muted); }
+  nav ul a:hover { color:var(--fg); }
+  .btn { display:inline-flex; align-items:center; gap:8px; height:42px; padding:0 18px; border-radius:11px; font-weight:600; font-size:14px; transition:.2s; border:1px solid var(--line); }
+  .btn.go { background:var(--lime); color:#08110a; border-color:var(--lime); box-shadow:0 0 30px -6px rgba(182,255,92,.6); }
+  .btn.go:hover { box-shadow:0 0 44px -4px rgba(182,255,92,.8); transform:translateY(-1px); }
+  .btn.ghost:hover { background:rgba(255,255,255,.06); }
+
+  .hero { position:relative; height:100vh; min-height:680px; display:flex; align-items:center; overflow:hidden; }
+  canvas { position:absolute; inset:0; width:100%; height:100%; }
+  .hero::after { content:""; position:absolute; inset:0; background:radial-gradient(ellipse 60% 55% at 30% 50%,rgba(6,11,22,.92),rgba(6,11,22,.35) 70%,transparent); pointer-events:none; }
+  .hero .wrap { position:relative; z-index:2; width:100%; }
+  h1 { font-size:clamp(48px,8vw,112px); line-height:.92; letter-spacing:-.05em; font-weight:600; max-width:860px; margin:22px 0 26px; }
+  h1 span { color:var(--lime); text-shadow:0 0 40px rgba(182,255,92,.45); }
+  .sub { font-size:19px; color:var(--muted); max-width:520px; margin-bottom:36px; }
+  .row { display:flex; gap:12px; flex-wrap:wrap; }
+  .hint { position:absolute; bottom:28px; left:50%; transform:translateX(-50%); z-index:2; font:12px "IBM Plex Mono",monospace; color:var(--muted); letter-spacing:.1em; }
+
+  .ticker { border-block:1px solid var(--line); overflow:hidden; white-space:nowrap; padding:18px 0; }
+  .ticker div { display:inline-block; animation:tick 30s linear infinite; font:500 14px "IBM Plex Mono",monospace; color:var(--muted); }
+  .ticker b { color:var(--lime); font-weight:500; margin:0 28px; }
+  @keyframes tick { to { transform:translateX(-50%); } }
+
+  section { padding:110px 0; }
+  h2 { font-size:clamp(34px,4.6vw,58px); line-height:1; letter-spacing:-.04em; font-weight:600; margin:16px 0 48px; max-width:720px; }
+  .grid { display:grid; grid-template-columns:repeat(12,1fr); gap:16px; }
+  .tile { background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:30px; position:relative; overflow:hidden; transition:transform .25s,border-color .25s; transform-style:preserve-3d; }
+  .tile:hover { border-color:rgba(182,255,92,.4); }
+  .tile h3 { font-size:30px; letter-spacing:-.03em; font-weight:600; margin:12px 0 10px; }
+  .tile p { color:var(--muted); max-width:420px; }
+  .t1 { grid-column:span 7; min-height:460px; background:radial-gradient(500px 300px at 80% 100%,rgba(182,255,92,.16),transparent),var(--panel); }
+  .t1 .pet { position:absolute; right:40px; bottom:40px; width:220px; height:220px; border-radius:28px; background:#fff3d6; display:grid; place-items:center; box-shadow:0 0 0 1px var(--line),0 40px 80px -30px rgba(182,255,92,.5); }
+  .t1 .pet img { width:170px; image-rendering:pixelated; animation:bob 2.2s steps(4) infinite; }
+  @keyframes bob { 50% { transform:translateY(-8px); } }
+  .t2 { grid-column:span 5; background:radial-gradient(400px 260px at 0% 100%,rgba(92,225,255,.14),transparent),var(--panel); }
+  .code { margin-top:28px; font:13px/1.8 "IBM Plex Mono",monospace; color:var(--muted); border-left:2px solid var(--cyan); padding-left:16px; }
+  .code b { color:var(--cyan); font-weight:500; }
+  .t3, .t4, .t5 { grid-column:span 4; }
+  .stat { font-size:52px; font-weight:600; letter-spacing:-.04em; line-height:1; color:var(--fg); }
+  .badges { display:flex; gap:8px; flex-wrap:wrap; margin-top:22px; }
+  .badges span { font:500 11px "IBM Plex Mono",monospace; letter-spacing:.06em; text-transform:uppercase; padding:6px 10px; border-radius:8px; border:1px solid var(--line); color:var(--muted); }
+  .badges .on { color:var(--lime); border-color:rgba(182,255,92,.4); }
+
+  .company { display:grid; grid-template-columns:1fr 1fr; gap:56px; }
+  .company p { color:var(--muted); font-size:18px; margin-bottom:18px; }
+  dl { border:1px solid var(--line); border-radius:20px; overflow:hidden; font-size:15px; }
+  dl div { display:grid; grid-template-columns:140px 1fr; padding:18px 24px; border-bottom:1px solid var(--line); }
+  dl div:last-child { border:0; }
+  dt { font:500 12px "IBM Plex Mono",monospace; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); padding-top:3px; }
+
+  .end { text-align:center; border-top:1px solid var(--line); background:radial-gradient(600px 300px at 50% 100%,rgba(182,255,92,.12),transparent); }
+  .end h2 { margin:16px auto 32px; }
+  footer { border-top:1px solid var(--line); padding:28px 0; color:var(--muted); font-size:14px; }
+  footer .wrap { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+
+  .reveal { opacity:0; transform:translateY(26px); transition:.9s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity:1; transform:none; }
+  @media (max-width:900px) {
+    nav ul { display:none; }
+    .t1,.t2,.t3,.t4,.t5 { grid-column:span 12; }
+    .t1 { min-height:520px; }
+    .t1 .pet { left:30px; right:auto; width:180px; height:180px; } .t1 .pet img { width:130px; }
+    .company { grid-template-columns:1fr; }
+    dl div { grid-template-columns:110px 1fr; }
+  }
+  @media (prefers-reduced-motion:reduce) { * { animation:none!important; transition:none!important; } .reveal { opacity:1; transform:none; } }
 </style>
 </head>
 <body>
-<main>
-  <h1>Learning Forever LLC</h1>
-  <p class="lede">A small California company that makes apps and practical guides.</p>
+<nav>
+  <a class="logo" href="#"><span class="px"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>Learning Forever</a>
+  <ul><li><a href="#products">Products</a></li><li><a href="#company">Company</a></li><li><a href="#contact">Contact</a></li></ul>
+  <a class="btn go" href="mailto:apps@learningforever.net">Contact</a>
+</nav>
 
-  <section>
-    <h2>What we make</h2>
-    <div class="card">
-      <h3>Sproutle <span class="tag">iPhone · coming soon</span></h3>
-      <p>A pixel-art pet that grows with your steps and sleep. Feed it, dress it up, and visit your friends' pets. <a href="https://oiseeurmt.github.io/sproutle-privacy/">Privacy policy</a></p>
-    </div>
-    <div class="card">
-      <h3>The Property Software Playbook</h3>
+<header class="hero">
+  <canvas id="field"></canvas>
+  <div class="wrap">
+    <div class="mono">Learning Forever LLC · Software studio</div>
+    <h1>We build software that <span>grows with you.</span></h1>
+    <p class="sub">Consumer apps and practical software education, designed, built and tested with modern AI tooling.</p>
+    <div class="row"><a class="btn go" href="#products">View products →</a><a class="btn ghost" href="#company">About us</a></div>
+  </div>
+  <div class="hint">MOVE YOUR CURSOR ↗</div>
+</header>
+
+<div class="ticker"><div>
+  <b>●</b>AI-NATIVE STUDIO<b>●</b>SPROUTLE · iOS BETA<b>●</b>PRIVATE BY DESIGN<b>●</b>NO ADS, EVER<b>●</b>PROPERTY SOFTWARE PLAYBOOK<b>●</b>CALIFORNIA, USA
+  <b>●</b>AI-NATIVE STUDIO<b>●</b>SPROUTLE · iOS BETA<b>●</b>PRIVATE BY DESIGN<b>●</b>NO ADS, EVER<b>●</b>PROPERTY SOFTWARE PLAYBOOK<b>●</b>CALIFORNIA, USA
+</div></div>
+
+<section id="products"><div class="wrap">
+  <div class="reveal"><div class="mono">// Products</div><h2>Focused products with a long horizon.</h2></div>
+  <div class="grid">
+    <article class="tile t1 reveal">
+      <div class="mono">iOS · Coming soon</div>
+      <h3>Sproutle</h3>
+      <p>A pixel-art pet that grows with your real steps and sleep. Feed it, dress it up, and visit your friends' pets nearby.</p>
+      <div class="badges"><span class="on">● Beta</span><span>Apple Health</span><span>Social</span></div>
+      <div class="pet"><img src="assets/sproutle.png" alt="Sproutle pet"></div>
+    </article>
+    <article class="tile t2 reveal">
+      <div class="mono" style="color:var(--cyan)">Education</div>
+      <h3>Property Software Playbook</h3>
       <p>Plain-English guides and training for property accounting software, written by a working property accountant.</p>
-    </div>
-  </section>
+      <div class="code"><b>01</b> Navigating the system<br><b>02</b> Month-end close<br><b>03</b> Reports that answer questions</div>
+    </article>
+    <article class="tile t3 reveal"><div class="stat">AI</div><h3 style="font-size:22px">Native workflow</h3><p>Designed, built and tested with modern AI tooling, so a small team ships like a large one.</p></article>
+    <article class="tile t4 reveal"><div class="stat">0</div><h3 style="font-size:22px">Ads, ever</h3><p>Your health data stays yours. We don't sell it and we don't run ads.</p></article>
+    <article class="tile t5 reveal"><div class="stat">∞</div><h3 style="font-size:22px">Always improving</h3><p>Small, frequent updates shaped by the people who use our products.</p></article>
+  </div>
+</div></section>
 
-  <section>
-    <h2>Contact</h2>
-    <p><a href="mailto:apps@learningforever.net">apps@learningforever.net</a></p>
-  </section>
+<section id="company" style="padding-top:0"><div class="wrap company">
+  <div class="reveal"><div class="mono">// Company</div><h2 style="margin-bottom:0">An independent studio in California.</h2></div>
+  <div class="reveal">
+    <p>Learning Forever LLC is an independent software company. We turn everyday habits and hard-won expertise into products that feel simple and enjoyable.</p>
+    <dl><div><dt>Legal name</dt><dd>Learning Forever LLC</dd></div><div><dt>Founded</dt><dd>2026</dd></div><div><dt>Based in</dt><dd>California, USA</dd></div><div><dt>Email</dt><dd>apps@learningforever.net</dd></div></dl>
+  </div>
+</div></section>
 
-  <footer>© 2026 Learning Forever LLC · California</footer>
-</main>
+<section class="end" id="contact"><div class="wrap reveal">
+  <div class="mono">// Contact</div>
+  <h2>Let's talk.</h2>
+  <a class="btn go" href="mailto:apps@learningforever.net">apps@learningforever.net</a>
+</div></section>
+<footer><div class="wrap"><span>© 2026 Learning Forever LLC · California</span><a href="https://oiseeurmt.github.io/sproutle-privacy/">Sproutle privacy policy</a></div></footer>
+
+<script>
+  const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && e.target.classList.add('in')), { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  document.querySelectorAll('.tile').forEach(t => {
+    t.addEventListener('pointermove', e => { const r = t.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; t.style.transform = `perspective(900px) rotateY(${x * 5}deg) rotateX(${-y * 5}deg)`; });
+    t.addEventListener('pointerleave', () => t.style.transform = '');
+  });
+
+  const cv = document.getElementById('field'), cx = cv.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W, H, cols, rows, S = 22, mouse = { x: -999, y: -999 }, t0 = performance.now();
+  function size() { const d = devicePixelRatio || 1; W = cv.clientWidth; H = cv.clientHeight; cv.width = W * d; cv.height = H * d; cx.setTransform(d, 0, 0, d, 0, 0); cols = Math.ceil(W / S); rows = Math.ceil(H / S); }
+  addEventListener('resize', size); size();
+  cv.parentElement.addEventListener('pointermove', e => { const r = cv.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; });
+  cv.parentElement.addEventListener('pointerleave', () => mouse.x = mouse.y = -999);
+  function frame(now) {
+    const t = (now - t0) / 1000;
+    cx.clearRect(0, 0, W, H);
+    for (let i = 0; i < cols; i++) for (let j = 0; j < rows; j++) {
+      const x = i * S + S / 2, y = j * S + S / 2;
+      const wave = Math.sin(i * .25 + t * 1.2) * Math.cos(j * .22 - t * .9);
+      const d = Math.hypot(x - mouse.x, y - mouse.y), near = Math.max(0, 1 - d / 220);
+      const a = .06 + Math.max(0, wave) * .22 + near * .8;
+      const s = 2 + Math.max(0, wave) * 2.5 + near * 9;
+      cx.fillStyle = near > .05 ? `rgba(182,255,92,${a})` : (wave > .55 ? `rgba(92,225,255,${a})` : `rgba(160,190,255,${a})`);
+      cx.fillRect(x - s / 2, y - s / 2, s, s);
+    }
+    if (!reduce) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+</script>
 </body>
 </html>
